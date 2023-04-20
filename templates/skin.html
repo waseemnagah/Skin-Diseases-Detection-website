@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Predict</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            line-height: 1.5;
+            background-color: #fff;
+            color: #4a4a4a;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+                border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #result {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #result-details {
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        #image-container {
+            margin: 20px auto;
+            max-width: 400px;
+            height: auto;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        #uploaded-image {
+            max-width: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Skin Predict</h1>
+        <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">Upload an Image:</label>
+                <input type="file" name="file" id="image">
+                <div>
+                    <button type="submit" class="btn btn-primary">Predict</button>
+                </div>
+                <h2>Predict Result</h2>
+                <div id="image-container">
+                    <img id="uploaded-image"
+                        src="C:\Users\wasem\Desktop\126517890_1811492399027381_640537635364373609_n.jpg"
+                        alt="Uploaded Image">
+                    <div id="result-details">
+                        <p>Predicted Disease Type: <span id="disease-type"></span></p>
+                        <p>Prediction Confidence: <span id="confidence-score"></span>%</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</body>
+
+</html>
