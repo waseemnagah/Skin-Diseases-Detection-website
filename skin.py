@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, jsonify, send_from_directory
+from flask import Flask, request, render_template, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import numpy as np
 import tensorflow as tf
@@ -14,8 +14,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
 
 # load pre-trained model
-model_path = os.path.abspath('Scripts\\modelENV.h5')
-model = tf.keras.models.load_model(model_path)
+#model_path = os.path.abspath('Scripts\\modelENV.h5')
+#model = tf.keras.models.load_model(model_path)
 
 # define function to check allowed file extensions
 def allowed_file(filename):
@@ -42,29 +42,35 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # check if file was uploaded
-    if 'file' not in request.files:
-        return render_template('index.html', error='Please select an image.')
+    if request.method == 'POST':
+        # check if file was uploaded
+        if 'files' not in request.files:
+            return render_template('index.html', error='Please select an image.')
 
-    file = request.files['file']
+        file = request.files['files']
 
-    # check if file was selected
-    if file.filename == '':
-        return render_template('index.html', error='Please select a new image.')
+        # check if file was selected
+        if file.filename == '':
+            return render_template('index.html', error='Please select a new image.')
 
-    # check if file is allowed
-    if not allowed_file(file.filename):
-        return render_template('index.html', error='Allowed file types are jpg, jpeg, and png.')
+        # check if file is allowed
+        if not allowed_file(file.filename):
+            return render_template('index.html', error='Allowed file types are jpg, jpeg, and png.')
 
-    # save file to upload folder
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
+        # save file to upload folder
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
 
-    # predict tumor type
-    tumor_type, result_class, confidence_score = predict_disease_type(file_path)
-
-    return render_template('index.html', filename=filename, result=tumor_type, result_class=result_class, confidence_score=confidence_score)
+        # predict tumor type
+        tumor_type, result_class, confidence_score = predict_disease_type(file_path)
+        return jsonify({
+            'sucess': True,
+            'filename': filename,
+            'result':tumor_type,
+            'result_class': result_class,
+            'confidence_score':confidence_score
+        }), 200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

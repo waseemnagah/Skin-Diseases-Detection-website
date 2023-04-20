@@ -75,29 +75,115 @@
         </div>
         <div class="d-flex justify-content-center">
             <div class="btn btn-primary btn-rounded">
-                <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" accept="image/*">
-                    <input type="submit" value="Predict">
-                </form>
-                {% if error %}
-                <div class="error-box">
-                    {{ error }}
-                </div>
-                {% endif %}
-                <h2>Tumor Name: {{ result }} </h2>
-                <div class="result-box {{ result_class }}">
-                </div>
-                <h2>Percentage of Prediction success: {{ confidence_score }} %</h2>
-                <div class="result-box2 {{ confidence_score }}">
-                </div>
-                <div class="image-box">
-                    {% if filename %}
-                    <img src="{{ url_for('uploaded_file', filename=filename) }}">
-                    {% endif %}
+                <div class="checker_form" id="checker-form">
+                    <div class="drag-area row text-center justify-content-center">
+                        <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <header class="drag-drop">Drag & Drop to Upload File</header>
+                        <span>OR</span>
+                        <button class="upload-btn">Browse File</button>
+                        <input id="fileUpload" class="upload-file" type="file" hidden>
+                    </div>
+                    <div class="row">
+                        <div class="col button text-left">
+                            <button id="cancel-upload" onclick="cancelUpload()" class="submit_btn">Cancel</button>
+                        </div>
+                        <div class="col button text-right">
+                            <button id="submit-upload" onclick="submitUpload()" class="submit_btn">Submit</button>
+                        </div>
+                        {% if error %}
+                        <div class="error-box">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                        <h2 id="tumor-name"></h2>
+                        <h2 id="percentage-of-prediction"></h2>
+                    </div>
                 </div>
             </div>
         </div>
 
 </body>
+<script>
+    function submitUpload() {
+        var data = new FormData()
+        data.append('files', file) // maybe it should be '{target}_cand'
+        data.append('name', file.name)
 
+        let url = "/prediction-covid"
+        fetch(url, {
+            method: 'POST',
+            body: data,
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                let tumor_type = res.tumor_type;
+                let confidence_score = res.confidence_score;
+                document.getElementById("tumor-name").innerText = 'Disease Name:' + tumor_type;
+                document.getElementById("percentage-of-prediction").innerText = 'Percentage of Prediction success:' + confidence_score;
+            })
+    };
+    function cancelUpload() {
+        //selecting all required elements
+        var dropArea = document.querySelector(".drag-area");
+        var uploadedImage = dropArea.querySelector("#uploaded-image");
+        var newArea = `<div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <header class="drag-drop">Drag & Drop to Upload File</header>
+                        <span>OR</span>
+                        <button class="upload-btn">Browse File</button>
+                        <input id="fileUpload" class="upload-file" type="file" hidden>`;
+        dropArea.classList.remove("active");
+        dropArea.removeChild(uploadedImage);
+        dropArea.insertAdjacentHTML("afterbegin", newArea);
+        var dragText = dropArea.querySelector(".drag-drop");
+        var button = dropArea.querySelector(".upload-btn");
+        var input = dropArea.querySelector(".upload-file");
+        button.onclick = () => {
+            input.click(); //if user click on the button then the input also clicked
+        }
+        input.addEventListener("change", function () {
+            //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+            file = this.files[0];
+            fileName = file.name;
+            dropArea.classList.add("active");
+            showFile(); //calling function
+        });
+        //If user Drag File Over DropArea
+        dropArea.addEventListener("dragover", (event) => {
+            event.preventDefault(); //preventing from default behaviour
+            dropArea.classList.add("active");
+            dragText.textContent = "Release to Upload File";
+        });
+        //If user leave dragged File from DropArea
+        dropArea.addEventListener("dragleave", () => {
+            dropArea.classList.remove("active");
+            dragText.textContent = "Drag & Drop to Upload File";
+        });
+        //If user drop File on DropArea
+        dropArea.addEventListener("drop", (event) => {
+            event.preventDefault(); //preventing from default behaviour
+            //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+            file = event.dataTransfer.files[0];
+            fileName = file.name;
+            showFile(); //calling function
+        });
+        function showFile() {
+            let fileType = file.type; //getting selected file type
+            let validExtensions = ["image/jpeg", "image/jpg", "image/png"]; //adding some valid image extensions in array
+            if (validExtensions.includes(fileType)) { //if user selected file is an image file
+                let fileReader = new FileReader(); //creating new FileReader object
+                fileReader.onload = () => {
+                    let fileURL = fileReader.result; //passing user file source in fileURL variable
+                    let imgTag = `<img id="uploaded-image" src="${fileURL}" alt="${file.name}">`; //creating an img tag and passing user selected file source inside src attribute
+                    dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
+                }
+                fileReader.readAsDataURL(file);
+            } else {
+                alert("This is not an Image File!");
+                dropArea.classList.remove("active");
+                dragText.textContent = "Drag & Drop to Upload File";
+            }
+        }
+    };
+</script>
+<script src="../static/upload.js"></script>
 </html>
