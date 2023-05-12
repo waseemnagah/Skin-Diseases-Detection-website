@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -18,13 +18,13 @@
     <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="shortcut icon" type="image/png" href="/static/Images/Picture2.png">
-    <title>Skin Diseases</title>
+    <title>Skin Diseases (Dermatological)</title>
 </head>
 
 <body>
     <div>
         <!--nav bar-->
-        <nav class="navbar navbar-expand-md navbar-light bg-info ">
+        <nav class="navbar navbar-expand-md navbar-light bg-info fixed-top">
             <a id="logo-color" class="navbar-brand logo fs-3 mx-3 text-white" href="#">Skin Diseases Detection</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
                 aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,35 +36,66 @@
                         <a class="nav-link" id="nav-color" href="#">Home</a>
                     </li>
                     <li class="nav-item px-3">
-                        <a class="nav-link blue" id="nav-color" href="#des">Diagnose</a>
+                        <a class="nav-link blue" id="nav-color" href="#des">About</a>
+                    </li>
+                    <li class="nav-item px-3">
+                        <a class="nav-link blue" id="nav-color" href="#des1">Diagnose</a>
                     </li>
                 </ul>
             </div>
         </nav>
+
         <div class="header">
             <!--<img  src="Images/Picture3.png" class="img-fluid w-100 postion-relative" alt="Responsive image">-->
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 title">
-                        <div class="hh">
-                            <h1 id="h1">Skin Diseases</h1>
+                        <div class="h1">
+                            <h1 id="h1">Dermatological Diseases (Skin)</h1>
                         </div>
-                        <div class="pp"></div>
                     </div>
+
                 </div>
+
             </div>
+            <p3>This site is used to diagnose the type of skin disease by uploading an image of the skin, and for
+                diagnosis, click
+                (Diagnosis) or for more information, click (About) in the upper right.</p3>
         </div>
+
     </div>
 
+    <div id="des" class="about">
+        <section class="des container "><!--about us section-->
+            <div class="section-title">
+                <h6 class="header-text"><b>About Us</b></h6>
+            </div>
+            <hr class="mx-auto" width="15%" color="#55E1F8" size="5px" align="left" />
+            <div class="content">
+                <b>We're a technical team that focuses on solve the medical health problems and offer solution to help
+                    diagnosing the
+                    medical conditions and We are excited to introduce our cutting-edge technology that can help detect
+                    skin diseases by
+                    analyzing images of the affected area. Our algorithm uses advanced machine learning techniques to
+                    accurately identify
+                    various skin conditions, With just a simple image upload, our system can quickly provide a
+                    diagnosis.
 
+                    including ('Benign Keratosis-like Lesions (BKL)', 'Eczema', 'Melanoma', 'Atopic Dermatitis', 'Tinea
+                    Ringworm Candidiasis', 'Basal
+                    Cell Carcinoma', 'Psoriasis and Lichen Planus', 'Melanocytic Nevi', 'Seborrheic Keratoses', 'Warts
+                    Molluscum').</b>
+            </div>
+        </section>
+    </div><!--end of about us section-->
 
     <!--Avatar-->
     <div class="Diagnose">
-        <section id="des" class="des container "><!--about us section-->
+        <section id="des1" class="des container "><!--about us section-->
             <div class="section-title">
-                <h2><b>Diagnose</b></h2>
+                <h6 class="header-text"><b>Diagnose</b></h6>
             </div>
-            <hr class="mx-auto" width="15%" color="#55E1F8" size="5px" align="left" />
+            <hr class="mx-auto" width="15%" color="#4bec60" size="5px" align="left" />
             <div class="content">
                 <p>Upload Your Image and get you results</p>
             </div>
@@ -73,7 +104,7 @@
             <img src="/static/Images/Picture2.png" class="rounded-circle" alt="example placeholder"
                 style="width: 200px;" />
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center total-box">
             <div class="btn btn-primary btn-rounded">
                 <div class="checker_form" id="checker-form">
                     <div class="drag-area row text-center justify-content-center">
@@ -82,45 +113,74 @@
                         <span>OR</span>
                         <button class="upload-btn">Browse File</button>
                         <input id="fileUpload" class="upload-file" type="file" hidden>
+
                     </div>
-                    <div class="row">
-                        <div class="col button text-left">
-                            <button id="cancel-upload" onclick="cancelUpload()" class="submit_btn">Cancel</button>
+                    <div class="row box">
+
+                        <header>Click cancel to Upload another File</header>
+                        <div class="btn-container">
+                            <div class="col button text-left">
+                                <button id="cancel-upload" onclick="cancelUpload()" class="submit_btn">Cancel</button>
+                            </div>
+                            <div class="col button text-right">
+                                <button id="submit-upload" onclick="submitUpload()" class="submit_btn">Predict</button>
+                            </div>
                         </div>
-                        <div class="col button text-right">
-                            <button id="submit-upload" onclick="submitUpload()" class="submit_btn">Submit</button>
+                        <div class="info-container">
+                            {% if error %}
+                            <div class="error-box">
+                                {{ error }}
+                            </div>
+                            {% endif %}
+                            <h3 id="tumor-name"></h3>
+                            <h2 id="percentage-of-prediction"></h2>
+
                         </div>
-                        {% if error %}
-                        <div class="error-box">
-                            {{ error }}
-                        </div>
-                        {% endif %}
-                        <h2 id="tumor-name"></h2>
-                        <h2 id="percentage-of-prediction"></h2>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- footer -->
+    <div class="footer-top fot mt-5">
+        <div class="container">
+            <div class="row">
+
+                <div class="fon col-lg-3 col-md-6 footer-links mt-4">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-chevron-right"></i><a href="#">Home</a></li><br>
+                        <li><i class="fa-solid fa-chevron-right"></i> <a href="#des">About us</a></li><br>
+                        <li><i class="fa-solid fa-chevron-right"></i> <a href="#des1">Diagnose</a></li><br>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
+
+
 <script>
     function submitUpload() {
         var data = new FormData()
         data.append('files', file) // maybe it should be '{target}_cand'
         data.append('name', file.name)
 
-        let url = "/prediction-covid"
+        let url = "/predict"
         fetch(url, {
             method: 'POST',
             body: data,
-            }).then(function (response) {
-                return response.json()
-            }).then(function (res) {
-                let tumor_type = res.tumor_type;
-                let confidence_score = res.confidence_score;
-                document.getElementById("tumor-name").innerText = 'Disease Name:' + tumor_type;
-                document.getElementById("percentage-of-prediction").innerText = 'Percentage of Prediction success:' + confidence_score;
-            })
+        }).then(function (response) {
+            return response.json()
+        }).then(function (res) {
+            let tumor_type = res.result;
+            let confidence_score = res.confidence_score;
+            document.getElementById("tumor-name").innerText = 'Disease Name: ' + tumor_type;
+            document.getElementById("percentage-of-prediction").innerText = 'Percentage of Prediction success: ' + confidence_score + ' %';
+        })
     };
     function cancelUpload() {
         //selecting all required elements
@@ -173,7 +233,7 @@
                 let fileReader = new FileReader(); //creating new FileReader object
                 fileReader.onload = () => {
                     let fileURL = fileReader.result; //passing user file source in fileURL variable
-                    let imgTag = `<img id="uploaded-image" src="${fileURL}" alt="${file.name}">`; //creating an img tag and passing user selected file source inside src attribute
+                    let imgTag = `<img id="uploaded-image" src="${fileURL}" alt="${file.name}" style="width: 300px;">`; //creating an img tag and passing user selected file source inside src attribute
                     dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
                 }
                 fileReader.readAsDataURL(file);
@@ -182,8 +242,13 @@
                 dropArea.classList.remove("active");
                 dragText.textContent = "Drag & Drop to Upload File";
             }
+            // Remove previous result
+            document.getElementById("tumor-name").innerHTML = "";
+            document.getElementById("percentage-of-prediction").innerHTML = "";
         }
     };
+
 </script>
 <script src="../static/upload.js"></script>
+
 </html>

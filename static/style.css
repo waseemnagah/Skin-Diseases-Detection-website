@@ -1,11 +1,12 @@
 body {
-    margin: 0;
-    padding: 0;
+    padding-top: 0;
 }
 
 #nav-color {
-    color: white;
-    padding: 0, 3%;
+    color: rgb(0, 0, 0);
+    padding: 0, 5%;
+    font-weight: bold;
+    font-size: 25px;
 }
 
 .title {
@@ -14,26 +15,89 @@ body {
 
 }
 
-.hh {
-    margin-bottom: 5%;
+.checker_form,
+.row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+}
+
+.row h2 {
+    font-size: 16px;
+    color: #000;
+    font-weight: blod;
+    text-align: left;
+}
+
+.row h3 {
+    font-size: 20px;
+    color: #000;
+    font-weight: blod;
+    text-align: left;
+}
+
+.row button {
+    border: none;
+    color: #20d84b;
+    padding: 10px 20px;
+    margin: 20px 0;
+
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#percentage-of-prediction {
+    font-size: 20px;
+    text-align: left;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0;
+    justify-content: space-between;
+
+}
+
+.total-box {
+    width: 500px;
+    height: 560px;
+    display: 70px;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 500px;
+}
+
+.h1 {
+    margin-bottom: 20%;
 
 }
 
 #h1 {
-    font-size: 90px;
+    position: absolute;
+    top: 150px;
+    font-size: 60px;
     color: rgb(9, 0, 0);
-    text-align: left;
-    /* use flexbox */
-    align-items: left;
+    right: 900px;
+    left: 50px;
+    /* text-align: left;
+    use flexbox 
+    align-items: left;*/
+    display: flex;
 }
 
-#h6 {
-    font-size: 25px;
-}
 
-h1 {
-    margin-left: 20%;
-}
+/* h2 {
+    color: black;
+    font-size: 16px;
+} */
 
 
 #DES {
@@ -45,14 +109,47 @@ h1 {
     text-align: center;
 }
 
+#des1 {
+    text-align: center;
+}
+
 .content {
     font-size: 20px;
 }
 
+.text-right {
+    text-align: center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+}
+.h5{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+p3 {
+    position: absolute;
+    border: 6px solid rgb(9, 39, 3);
+    font-size: 20px;
+    top: 300px;
+    right: 70px;
+    left: 1100px;
+    color: rgb(2, 7, 46);
+    font-weight: bold;
+    padding: 12px;
+    margin-bottom: 30px;
+    /* change "red" to the color you want */
+}
 
 .Diagnose {
-    /* margin-top: 20%; */
-    padding: 5% 0%;
+    padding: 2% 0%;
     background-color: aliceblue;
 }
 
@@ -69,8 +166,14 @@ h1 {
 
 }
 
+/*
+.box {
+    width: 200px;
+    height: 400px;
+}*/
+
 img {
-    position: relative;
+    position: static;
 }
 
 hr {
@@ -78,19 +181,25 @@ hr {
 }
 
 .fa-chevron-right {
-    color: #209dd8;
+    color: #20d84b;
 }
 
 .fa-brands {
-    color: #209dd8;
+    color: #20d832;
     padding: 10px 10px;
 }
 
 .fa-brands:hover {
-    color: #4b86ec;
+    color: #4bec60;
 }
 
 .fon h3,
 h4 {
     color: #87b2fd;
+}
+.header-text {
+    font-size: 28px;
+}
+.Diagnose {
+    margin: 80px 0;
 }
