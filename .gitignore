@@ -135,3 +135,5 @@ dmypy.json
 /static/uploads/
 
 vars.env
+
+modelENV_skin_final.h5

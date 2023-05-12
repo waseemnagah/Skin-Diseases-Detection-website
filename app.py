@@ -1,66 +1,79 @@
 import os
-from flask import Flask, request, render_template, redirect, abort, jsonify, flash, url_for
-import webbrowser
-from flask_cors import CORS
-from flask_mail import Mail, Message
-from sqlalchemy import or_
+from flask import Flask, request, render_template, send_from_directory, jsonify
+from werkzeug.utils import secure_filename
 import numpy as np
 import tensorflow as tf
-from werkzeug.utils import secure_filename
-from flask import send_from_directory
-from keras.preprocessing import image
-import matplotlib.pyplot as plt
-
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
-# intial program
 
 app = Flask(__name__)
-"""
-@app.route("/")
-def home():
-    return render_template("test2.html")
-"""
 
+# configure upload folder
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# configure allowed extensions
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
+
+# load pre-trained model
+model_path = './modelENV_skin_final.h5'
+model = tf.keras.models.load_model(model_path)
+
+# define function to check allowed file extensions
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/", methods=["POST", "GET"])
-def home():
-    # check if the post request has the file part
+# define function to predict disease type
+def predict_disease_type(image_path):
+    image = tf.keras.preprocessing.image.load_img(image_path, target_size=(125, 125))
+    image = tf.keras.preprocessing.image.img_to_array(image)
+    image = np.expand_dims(image, axis=0)
+    pred = model.predict(image)
+    categories = ['Atopic Dermatitis', 'Basal Cell Carcinoma', 'Seborrheic Keratoses', 'Eczema', 'Melanocytic Nevi', 'Melanoma', 'Psoriasis and Lichen Planus', 'Benign Keratosis-like Lesions (BKL)', 'Tinea Ringworm Candidiasis', 'Warts Molluscum']
+    index = np.argmax(pred)
+    prediction = categories[index]
+    confidence_score = pred[0][index]
+    percentage = round(confidence_score, 0) * 100
+    return prediction, prediction, percentage
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
     if request.method == 'POST':
+        # check if file was uploaded
         if 'files' not in request.files:
-            flash('No file part')
+            return render_template('index.html', error='Please select an image.')
+
         file = request.files['files']
-        # if user does not select file, browser also
-        # submit an empty part without filename
+
+        # check if file was selected
         if file.filename == '':
-            flash('No selected file')
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        categories = ['Bengin cases', 'Malignant cases', 'Normal cases']
-        #categories = ['Astrocitoma', 'Carcinoma', 'Ependimoma', 'Ganglioglioma', 'Germinoma', 'Glioblastoma', 'Granuloma', 'Meduloblastoma', 'Meningioma', 'Neurocitoma', 'Normal', 'Oligodendroglioma', 'Papiloma', 'Schwannoma', 'Tuberculoma']
-        model =  tf.keras.models.load_model('F:\\College\\Level 4\\Semester 2\\Pattern Recognition\\Project\\env\\final_model.h5')
-        
-        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        img = image.load_img(path, target_size=(256, 256))
-        x=image.img_to_array(img)
-        x /= 255
-        x=np.expand_dims(x, axis=0)
-        images = np.vstack([x])
-        
-        pred = model.predict(images, batch_size=10)
-        output = categories[np.argmax(pred)]
-        #percentage = round(classes[0][0] * 100, 2)
-        
-        prediction = output
-        #percentage = 100 - percentage
+            return render_template('index.html', error='Please select a new image.')
 
-        return render_template("test2.html" , pre=prediction)
+        # check if file is allowed
+        if not allowed_file(file.filename):
+            return render_template('index.html', error='Allowed file types are jpg, jpeg, and png.')
 
-# to run app
-if __name__ == "__main__":
-    # automatically open web browser
-    webbrowser.open_new('http://127.0.0.1:5000/')
-    app.run()
+        # save file to upload folder
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+
+        # predict tumor type
+        tumor_type, result_class, confidence_score = predict_disease_type(file_path)
+        return jsonify({
+            'sucess': True,
+            'filename': filename,
+            'result':tumor_type,
+            'result_class': result_class,
+            'confidence_score':confidence_score
+        }), 200
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+if __name__ == '__main__':
+    app.run(debug=True)
